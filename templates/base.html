@@ -15,8 +15,11 @@
             <a href="/">Homepage</a>
             {% if user.is_authenticated and user.citizen %} 
             	| Doctor appointment 
-           	 	| Clinics
+                | <a href="{% url "appointments_centers" %}">Clinics</a>
            	{% endif %}
+            {% if user.is_authenticated and user.is_staff %}
+                | <a href="admin/">Admin</a>
+            {% endif %}
         </div>
         <div class="login-box">
             {% if user.is_anonymous %}

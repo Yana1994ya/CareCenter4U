@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>Center {{ center.name }}</div>
+    <div>{{ center.neighborhood }}</div>
+    <div>{{ center.address }}</div>
+
+    <div class="doctors">
+        List of drs
+        {% for dr in drs %}
+            <div>
+                <a href="{% url "appointments_add" center_id=center.id doctor_id=dr.id %}">Dr {{ dr.first_name }} {{ dr.last_name }} - {{ dr.speciality }}</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,4 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-    This is a homepage, put some blah blah here
+	{% if user.is_authenticated and user.secretary %} 
+         Hello i am secretary
+    {% else %}
+    	 This is a homepage, put some blah blah here
+    {% endif %}
+   
+    
 {% endblock %}

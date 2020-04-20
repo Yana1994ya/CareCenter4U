@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'users',
     'citizen',
     'appointments',
+    'secretary',
+
 ]
 
 MIDDLEWARE = [

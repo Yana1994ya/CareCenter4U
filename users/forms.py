@@ -15,7 +15,7 @@ class RegistrationForm(forms.Form):
 
     def clean_id_number(self):
         full_id = self.cleaned_data["id_number"]
-        if full_id.endswith('M') or full_id.endswith('A'):
+        if full_id.endswith('M'):
             id_num=full_id[0:-1]
         else:
             id_num=full_id  

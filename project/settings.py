@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'users',
     'citizen',
     'appointments',
-    'bootstrap4',
-    'bootstrap3',
+    #'bootstrap4',
+    #'bootstrap3',
     'secretary',
 ]
 

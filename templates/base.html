@@ -16,6 +16,7 @@
             {% if user.is_authenticated and user.citizen %} 
             	| Doctor appointment 
            	 	| Clinics
+                | <a href="{% url "update" user.id %}">Update</a>
            	{% endif %}
         </div>
         <div class="login-box">

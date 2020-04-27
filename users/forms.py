@@ -51,3 +51,8 @@ class RegistrationForm(forms.Form):
             raise forms.ValidationError("last name shouldn't have digits")
 
         return last_name
+
+class UpdateInfoForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ['phone_number', 'address', 'email']    

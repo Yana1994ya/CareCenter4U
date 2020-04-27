@@ -34,9 +34,13 @@ class Centers(models.Model):
 	address  = models.CharField(max_length=200)
 	neighbrohood = models.CharField(max_length=200)
 	HMOname = models.CharField(max_length=200)
+	hours = models.CharField(max_length=500)
+	contact_info = models.CharField(max_length=200)
+	routs = models.CharField(max_length=200)
 	
 	def __str__(self):
-		return self.name + ' ' + self.address + ' ' + self.neighbrohood
+		return self.name + ' ' + self.address + ' ' + self.neighbrohood + '\n' + self.contact_info + '\n' + self.hours + '\n' + self.routs 
+
 	
 	
 	

@@ -1,9 +1,8 @@
 from django.shortcuts import render
-from users.forms import RegistrationForm
+from users.forms import RegistrationForm, UpdateInfoForm
 from users.models import Customer
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
 
 # Create your views here.
 def register(request):
@@ -40,3 +39,28 @@ def register(request):
 
 def register_thanks(request):
     return render(request, "users/register_thanks.html")
+
+def help_update(request, id_):
+    query_results = Customer.objects.get(id=id_)
+    return render(request, 'users/help_update.html', {'query_results': query_results})
+
+def update_success(request):
+    return render(request, "users/update_success.html")
+
+def update(request, user_id):
+    user = Customer.objects.get(id=user_id)
+    phone_number = user.phone_number
+    address = user.address
+    mail = user.email
+    
+    if request.method != 'POST':
+        form = UpdateInfoForm(instance=user)
+    else:
+        form = UpdateInfoForm(instance=user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("update_success"))
+    context = {'phone_number':phone_number, 'address':address, 'email':mail, 'form': form}
+    return render(request, 'users/update.html', context)
+
+

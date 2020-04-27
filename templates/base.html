@@ -16,6 +16,7 @@
             {% if user.is_authenticated and user.citizen %} 
             	| <a href="{% url "index" %}">Doctor appointment</a> 
            	 	| Clinics
+                | <a href="{% url "update" user.id %}">Update</a>
            	{% endif %}
             {% if user.is_authenticated and user.is_superuser %}
                 | <a href="admin/">Admin</a>

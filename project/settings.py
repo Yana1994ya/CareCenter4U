@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'citizen',
     'appointments',
     'secretary',
-
+    'centers'
 ]
 
 MIDDLEWARE = [

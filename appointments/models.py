@@ -23,7 +23,7 @@ class appointments(models.Model):
 class Doctors(models.Model):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
-    center_id = models.ForeignKey('Centers', blank=False, max_length=100, on_delete=models.CASCADE,
+    center_id = models.ForeignKey(Center, blank=False, max_length=100, on_delete=models.CASCADE,
                                   related_name='cen_i_work_at')
     specielity = models.CharField(max_length=200)
 

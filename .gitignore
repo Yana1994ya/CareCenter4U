@@ -5,3 +5,5 @@ Pipfile.lock
 .project
 .pydevproject
 *.pyc
+poetry.lock
+pyproject.toml

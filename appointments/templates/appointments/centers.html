@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    List of centers
+    {% for center in centers %}
+        <div>
+            <a href="{% url "appointments_center" center_id=center.id %}">{{ center.name }}</a>
+        </div>
+    {% endfor %}
+{% endblock %}

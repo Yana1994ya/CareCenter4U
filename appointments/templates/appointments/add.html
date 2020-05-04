@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="center">
+        <div>Center {{ center.name }}</div>
+        <div>{{ center.neighborhood }}</div>
+        <div>{{ center.address }}</div>
+    </div>
+    <div class="doctor">
+        <div>Dr {{ doctor.first_name }} {{ doctor.last_name }} - {{ doctor.speciality }}</div>
+    </div>
+
+    <form class="myform" action="{% url "appointments_add" center_id=center.id doctor_id=doctor.id %}" method="post">
+        {% csrf_token %}
+
+        {{ form.appointment_date.errors }}
+        <label for="{{ form.appointment_date.id_for_label }}">Appointment date:</label>
+        <div class="input">{{ form.appointment_date }}</div>
+
+        {{ form.appointment_time.errors }}
+        <label for="{{ form.appointment_time.id_for_label }}">Appointment time:</label>
+        <div class="input">{{ form.appointment_time }}</div>
+
+        <input type="submit" value="Register">
+    </form>
+{% endblock %}

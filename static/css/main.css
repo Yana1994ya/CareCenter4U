@@ -41,3 +41,7 @@ form.myform label{
 form.myform input[type="submit"] {
     margin-top: 10px;
 }
+
+.doctors{
+    margin-top: 30px;
+}

@@ -1,55 +1,75 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
+from django.shortcuts import HttpResponse, render
+from django.views.generic import DetailView
 
-from appointments.models import Center, Doctor, Appointment
-from appointments.forms import AddAppointment
+from appointments.forms import appointmentForm
+from appointments.models import appointments
 
 
-# Create your views here.
-@login_required
-def centers(request):
-    centers = Center.objects.all()
-
-    return render(request, "appointments/centers.html", {"centers": centers})
-
-
-@login_required
-def show_center(request, center_id):
-    center = get_object_or_404(Center, id=center_id)
-    drs = Doctor.objects.filter(center=center)
-
-    return render(request, "appointments/center.html", {"center": center, "drs": drs})
+# after updating it will redirect to detail_View 
+def detail_view(request, id):
+    context = {}
+    context["data"] = appointments.objects.get(id=id)
+    return render(request, "detail_view.html", context)
 
 
-@login_required
-def add_appointment(request, center_id, doctor_id):
-    center = get_object_or_404(Center, id=center_id)
-    doctor = get_object_or_404(Doctor, id=doctor_id)
+class appointmentsdetail(DetailView):
+    template_name = 'appointment_files/view_appointment.html'
+    model = appointments
 
+
+def index(request):
+    if request.user.is_authenticated:
+        # If a user is logged in, redirect them to a page informing them of such
+        return render(request, 'appointment_files/index.html')
+    else:
+        return render(request, 'base.html')
+
+
+def viewAppointments(request):
+    query_results = appointments.objects.all()
+    return render(request, 'appointment_files/view_appointment.html', {'query_results': query_results})
+
+
+def add(request):
     if request.method == "POST":
-        form = AddAppointment(request.POST)
-
+        form = appointmentForm(request.POST)
         if form.is_valid():
-            appointment = Appointment()
-            appointment.doctor = doctor
-            appointment.center = center
+            add = form.cleaned_data
+            add = form.save()
 
-            data = form.cleaned_data
-            appointment.appointment_date = data["appointment_date"]
-            appointment.appointment_time = data["appointment_time"]
-            appointment.patient = request.user
-
-            appointment.save()
-
-            return HttpResponseRedirect(reverse("appointments_add_thanks"))
+            return HttpResponse("appointment added!!!")
 
     else:
-        form = AddAppointment()
+        form = appointmentForm()
 
-    return render(request, "appointments/add.html", {"center": center, "doctor": doctor, "form": form})
+    return render(request, "appointment_files/add.html", {"form": form})
 
 
-def message(request, text):
-    return render(request, "appointments/message.html", {"text": text})
+def delete_app(request, app_id):
+    app = appointments.objects.get(id=app_id)
+
+    if request.method == 'POST':
+        app.delete()
+
+    return HttpResponse("appointment Deleted!!!")
+
+
+def edit(request, app_id):
+    app = appointments.objects.get(id=app_id)
+    f_name = app.first_name
+    l_name = app.last_name
+    t = app.time_field
+    d = app.date_field
+    cent = app.center_id
+    d_name = app.doctor_name
+    p_id = app.pat_id
+    if request.method != 'POST':
+        form = appointmentForm(instance=app)
+    else:
+        form = appointmentForm(instance=app, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("appointment edited!!!")
+    context = {'first_name': f_name, 'last_name': l_name, 'pat_id': p_id, 'center': cent,
+               'time_field': t, 'date_field': d, 'doctor_name': d_name, 'form': form}
+    return render(request, 'appointment_files/edit.html', context)

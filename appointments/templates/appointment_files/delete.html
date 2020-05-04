@@ -1,0 +1,22 @@
+{%  extends "base.html" %}
+{% block content %}
+    <form class="myform" action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+  </form>
+  <ul>
+    {% for app in appointments %}
+      <li>
+        {{ app.id }}
+        <p>{{ app.pat_id. }}</p>
+        <p>{{ app.first_name }}</p>
+        <p>{{ app.last_name }}</p>
+        <p>{{ app.time_field }}</p>
+        <p>{{ app.date_field }}</p>
+        <p>{{ app.center_id }}</p>
+        <p>{{ app.doctor_name }}</p>
+        <a href="{% url 'delete' app.id %}">edit</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock content %}

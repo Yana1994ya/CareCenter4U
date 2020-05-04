@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Appointments Viewer</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
+<style type="text/css">
+	.container1 {
+		border: solid;
+	}
+</style>
+<body>
+	<div class="container">
+	<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-3">Appointment Details</h1>
+    </div>
+</div>
+<div class="container1">
+	
+<table class="table">
+<thead>
+    <tr>
+      <th>ID:</th>
+      <th>First Name:</th>
+      <th>Last Name:</th>
+      <th>Time:</th>
+      <th>Date:</th>
+      <th>Doctor:</th>
+      <th>Center:</th>
+	    {% for item in query_results %}
+	    <tr> 
+	        <td>{{ item.pat_id_id }}</td>
+	        <td>{{ item.first_name }}</td>
+	        <td>{{ item.last_name }}</td>
+	        <td>{{ item.time_field }}</td>
+	        <td>{{ item.date_field }}</td>
+	        <td>{{ item.doctor_name }}</td>
+	        <td>{{ item.center }}</td>
+	        <td>
+			    <form action="{% url 'delete' item.id %}" method=POST class=delete-app>
+			    {% csrf_token %}
+			    <input type=hidden value={{item.id}} name=post_to_delete></input>
+			    <input type=submit value=Delete></input>
+			    </form>
+			</td>
+			<td>
+			    <form action="{% url 'edit' item.id %}" method=POST class=edit-app>
+			    {% csrf_token %}
+			    <input type=hidden value={{item.id}} name=post_to_delete></input>
+			    <input type=submit value=Edit></input>
+			    </form>
+			</td>
+	    </tr>
+	    {% endfor %}
+	    
+</table>
+</table>
+</div>
+	<a class="btn btn-primary btn-md" href="/" role="button">Back</a>
+</body>
+</html>

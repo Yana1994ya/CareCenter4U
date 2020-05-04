@@ -1,6 +1,9 @@
 from django import forms
 
+from .models import appointments
 
-class AddAppointment(forms.Form):
-    appointment_date = forms.DateField()
-    appointment_time = forms.TimeField()
+
+class appointmentForm(forms.ModelForm):
+    class Meta:
+        model = appointments
+        fields = ['first_name', 'last_name', 'pat_id', 'center', 'time_field', 'date_field', 'doctor_name']

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+    <form class="myform" action="{% url "add" %}" method="post">
+        {% csrf_token %}
+        {{ form.errors }}
+	            <div>
+		        {{ form.pat_id.errors }}
+		        <label for="{{ form.pat_id.id_for_label }}">ID Number:</label>
+		        <div class="input">{{ form.pat_id }}</div>
+	            </div>
+	            <div>
+	                <p>First Name:</p>
+	                <input type="text" id="f_name" name="first_name">
+	            </div>
+	            <div>
+	                <p>Last Name:</p>
+	                <input type="text" id="l_name" name="last_name">
+	            </div>
+	            <div>
+	                <p>Date:</p>
+	                <input type="date" id="date" name="date_field">
+	            </div>
+	            <div>
+	                <p>Time:</p>
+	                <input type="time" id="time" name="time_field">
+	            </div>
+	            <div>
+		        {{ form.doctor_name.errors }}
+		        <label for="{{ form.doctor_name.field }}">Doctor Name:</label>
+		        <div class="input">{{ form.doctor_name }}</div>
+	            </div>
+	            <div>
+		        {{ form.center.errors }}
+		        <label for="{{ form.center.id_for_label }}">Center ID:</label>
+		        <div class="input">{{ form.center }}</div>
+	            </div>           	      
+        <input type="submit" value="add" />
+    </form>
+{% endblock %}

@@ -17,7 +17,7 @@ div.content{
 
 header div.logo {
     width: 250px;
-    padding-left: 20px;
+    padding: 5px 5px;
 }
 
 header div.main-menu{

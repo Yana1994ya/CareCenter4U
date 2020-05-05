@@ -3,7 +3,9 @@
     <form class="myform" action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button name="submit">Apply</button>
+    <p class="submit-row">
+        <button name="submit">Apply</button>
+    </p>
   </form>
   <ul>
     {% for x in Customer %}

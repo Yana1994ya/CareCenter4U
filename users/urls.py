@@ -14,5 +14,5 @@ urlpatterns = [
     path("help_update", help_update, name="help_update"),
     path("update_success", update_success, name="update_success"),
     path("filter_centers", filter_centers, name="filter_centers"),
-    path("show/<int:cent_id>", show, name="show"),
+    path("show/<int:id>", show, name="show"),
 ]

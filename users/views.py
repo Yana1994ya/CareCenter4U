@@ -69,6 +69,6 @@ def filter_centers(request):
     return render(request, 'users/filter_centers.html', context = {'query_results': query_results})
 
 
-def show(request, id_):
-    center = Center.objects.get(id=id_)
+def show(request, id):
+    center = Center.objects.get(id=id)
     return render(request, 'users/show.html', context={'center':center})

@@ -1,0 +1,50 @@
+{%  extends "base.html" %}
+{% block content %}
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  text-align: middle;
+}
+
+th, td {
+  padding: 10px;
+}
+</style>
+</head>
+<div class="container1">
+<table class="table">
+	<thead>
+	    <tr>
+	      <th>ID:</th>
+	      <th>Name:</th>
+	      <th>Address:</th>
+	      <th>Neighbrohood:</th>
+	      <th>HMO Name:</th>
+	      <th>Hours:</th>
+	      <th>Contact Information:</th>
+		  <th>Routs:</th>
+		    <tr> 
+		        <td>{{ center.cent_id }}</td>
+		        <td>{{ center.name }}</td>
+		        <td>{{ center.address }}</td>
+		        <td>{{ center.neighbrohood }}</td>
+		        <td>{{ center.HMOname }}</td>
+		        <td>{{ center.hours }}</td>
+		        <td>{{ center.contact_info }}</td>
+				<td>{{ center.routs }}</td>
+		        <td>
+				    <form action="{% url 'show' center.cent_id %}" method=POST class=show>
+				    {% csrf_token %}
+				    <input type=hidden value={{center.cent_id}} name=show-center></input>
+				    </form>
+				</td>
+		    </tr>
+		</tr>
+	</thread>
+</table>
+</div>
+	<a class="btn btn-primary btn-md" href="/" role="button">Back</a>
+</html>
+{% endblock content %}

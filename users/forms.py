@@ -1,6 +1,6 @@
 from django import forms
 from users.models import Customer
-from appointments.models import Centers
+from centers.models import Center
 
 class RegistrationForm(forms.Form):
     id_number = forms.CharField(min_length=9, max_length=9)
@@ -60,5 +60,5 @@ class UpdateInfoForm(forms.ModelForm):
        
 class CenterFilterForm(forms.ModelForm):
     class Meta:
-        model = Centers
-        fields = ['cent_id', 'name', 'address', 'neighbrohood', 'HMOname', 'hours', 'contact_info', 'routs' ]
+        model = Center
+        fields = ['id', 'name', 'address', 'neighborhood', 'network', 'hours', 'phone', 'routes', 'fax', 'email' ]

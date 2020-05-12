@@ -1,0 +1,54 @@
+{%  extends "base.html" %}
+{% block content %}
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  text-align: middle;
+}
+
+th, td {
+  padding: 10px;
+}
+</style>
+</head>
+<div class="container1">
+<table class="table">
+	<thead>
+	    <tr>
+	      <th>ID:</th>
+	      <th>Name:</th>
+	      <th>Address:</th>
+	      <th>Neighbrohood:</th>
+	      <th>Network:</th>
+	      <th>Hours:</th>
+	      <th>Phone:</th>
+		  <th>Fex:</th>
+	      <th>Email:</th>
+		  <th>Routes:</th>
+		    <tr> 
+		        <td>{{ center.id }}</td>
+		        <td>{{ center.name }}</td>
+		        <td>{{ center.address }}</td>
+		        <td>{{ center.neighbrohood }}</td>
+		        <td>{{ center.network }}</td>
+		        <td>{{ center.hours }}</td>
+		        <td>{{ center.phone }}</td>
+				<td>{{ center.fax }}</td>
+				<td>{{ center.email }}</td>
+				<td>{{ center.routes }}</td>
+		        <td>
+				    <form action="{% url 'show' center.id %}" method=POST class=show>
+				    {% csrf_token %}
+				    <input type=hidden value={{center.id}} name=show-center></input>
+				    </form>
+				</td>
+		    </tr>
+		</tr>
+	</thread>
+</table>
+</div>
+	<a class="btn btn-primary btn-md" href="/" role="button">Back</a>
+</html>
+{% endblock content %}

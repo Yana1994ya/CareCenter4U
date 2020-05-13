@@ -1,0 +1,83 @@
+{%  extends "base.html" %}
+ <!DOCTYPE html>
+{% block content %}
+	<body>
+	{% csrf_token %}
+		<p> Select Filters</p>
+		<form action="" method=post>
+		{% csrf_token %}
+		<label>Name:</label>
+	    <select id="names" onchange="f1();">
+			{% for item in query_results %}
+	        <option selected="selected" value="{{ item.id }}">{{ item.name }}</option>
+			{% endfor %}
+		</select><br><br>
+		<script>
+			document.getElementById("names").onchange = function() {f1()};
+			function f1(){
+				var id = document.getElementById("names").value;
+				document.getElementById("addresses").value = id;
+				document.getElementById("nei-hoods").value = id;
+				document.getElementById("hmos").value = id;
+				return id;
+			};
+		</script>
+		<label>Address:</label>
+	    <select id="addresses" onchange="f2();">
+			{% for item in query_results %}
+	        <option selected="selected" value="{{ item.id }}">{{ item.address }}</option>
+			{% endfor %}
+		</select><br><br>
+		<script>
+			document.getElementById("addresses").onchange = function() {f2()};
+			function f2(){
+				var id = document.getElementById("addresses").value;
+				document.getElementById("names").value = id;
+				document.getElementById("nei-hoods").value = id;
+				document.getElementById("hmos").value = id;
+				return id;
+			};
+		</script>
+		<label>Neighbrohood:</label>
+	    <select id="nei-hoods" onchange="f4();">
+			{% for item in query_results %}
+	        <option selected="selected" value="{{ item.id }}">{{ item.neighbrohood }}</option>
+			{% endfor %}
+		</select><br><br>
+		<script>
+			document.getElementById("nei-hoods").onchange = function() {f4()};
+			function f4(){
+				var id = document.getElementById("nei-hoods").value;
+				document.getElementById("addresses").value = id;
+				document.getElementById("names").value = id;
+				document.getElementById("hmos").value = id;
+				return id;
+			};
+		</script>
+		<label>Network Name:</label>
+	    <select id="hmos" onchange="f3();">
+			{% for item in query_results %}
+	        <option selected="selected" value="{{ item.id }}">{{ item.network }}</option>
+			{% endfor %}
+		</select><br><br>
+		<script>
+			document.getElementById("hmos").onchange = function() {f3()};
+			function f3(){
+				var id = document.getElementById("hmos").value;
+				document.getElementById("addresses").value = id;
+				document.getElementById("nei-hoods").value = id;
+				document.getElementById("names").value = id;
+				return id;
+			};
+		</script>
+		<button onClick="f5();" type="button">Search</button>
+		<script>
+		function f5(){
+			var x = f3();
+			window.location.href="http://127.0.0.1:8000/users/show/"+encodeURIComponent(x);
+		}
+		</script>
+		</form>
+	</body>
+{% endblock %}
+

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from users.forms import RegistrationForm, UpdateInfoForm
 from users.models import Customer
+from centers.models import Center
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -63,4 +64,11 @@ def update(request, user_id):
     context = {'phone_number':phone_number, 'address':address, 'email':mail, 'form': form}
     return render(request, 'users/update.html', context)
 
+def filter_centers(request):
+    query_results = Center.objects.all()
+    return render(request, 'users/filter_centers.html', context = {'query_results': query_results})
 
+
+def show(request, id):
+    center = Center.objects.get(id=id)
+    return render(request, 'users/show.html', context={'center':center})

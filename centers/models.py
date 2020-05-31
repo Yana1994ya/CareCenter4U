@@ -32,7 +32,7 @@ class Center(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
     address = models.CharField(max_length=200)
     network = models.ForeignKey(Network, on_delete=models.CASCADE)
-    hours = models.CharField(max_length=200, default=None, blank=True)
+    hours = models.CharField(max_length=800, default=None, blank=True)
 
     phone = models.CharField(max_length=200, default=None, blank=True)
     fax = models.CharField(max_length=200, default=None, blank=True)

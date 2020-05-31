@@ -21,6 +21,7 @@
             	| <a href="{% url "index" %}" class="button">Doctor appointment</a>
                 | <a href="{% url "update" user.id %}" class="button">Update</a>
 		| <a href="{% url "filter_centers" %}" class="button">Search</a>
+		| <a href="http://127.0.0.1:8000/users/lloo" class="button" rel="noopener noreferrer">Nearest Centers</a>
            	{% endif %}
             {% if user.is_authenticated and user.is_superuser %}
                 | <a href="/admin/" class="button">Admin</a>

@@ -1,3 +1,7 @@
+import smtplib, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 from django import forms
 from users.models import Customer
 from centers.models import Center
@@ -56,7 +60,41 @@ class RegistrationForm(forms.Form):
 class UpdateInfoForm(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = ['phone_number', 'address', 'email']    
+        fields = ['phone_number', 'address', 'email']
+
+        sender_email = "addmin3439@gmail.com"
+
+        receiver_email = "addmin3439@gmail.com"
+
+        # receiver_email = Customer.email
+        password = "ll121212"
+
+        message = MIMEMultipart("alternative")
+        message["Subject"] = "Employee details!"
+        message["From"] = sender_email
+        message["To"] = receiver_email
+
+        text = """\
+        Hi,
+        Employee details in have been successfully updated
+
+        Good Day!!!
+        
+         """
+
+        part1 = MIMEText(text, "plain")
+        part2 = MIMEText(text, "plain_2")
+
+        message.attach(part1)
+        message.attach(part2)
+
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(sender_email, password)
+            server.sendmail(
+                sender_email, receiver_email, message.as_string()
+            )
+
        
 class CenterFilterForm(forms.ModelForm):
     class Meta:

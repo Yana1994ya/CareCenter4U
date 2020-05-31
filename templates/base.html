@@ -14,9 +14,6 @@
         </div>
         <div class="main-menu">
             <a href="/" class="button">Homepage</a>
-            {% if user.is_authenticated and user.citizen %}
-                | <a href="{% url "appointments_centers" %}" class="button">Clinics</a>
-           	{% endif %}
             {% if user.is_authenticated %}
             	| <a href="{% url "index" %}" class="button">Doctor appointment</a>
                 | <a href="{% url "update" user.id %}" class="button">Update</a>

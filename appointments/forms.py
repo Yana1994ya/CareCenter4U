@@ -1,42 +1,45 @@
 from django import forms
+from datetime import datetime, timedelta, time
+
+from django.core.exceptions import ValidationError
 
 from appointments.models import Appointment
 
 
+def valid_times():
+    return_list = []
+
+    runner = datetime(2000, 1, 1, 8, 0, 0)
+
+    while runner.time() < time(13, 0, 0):
+        return_list.append((runner.time(), runner.strftime("%H:%M")))
+        runner += timedelta(minutes=10)
+
+    return return_list
+
+
 class AppointmentForm(forms.ModelForm):
-    class Meta:
-        model = Appointment
-        fields = ['patient',  'time_field', 'date_field', 'doctor']
-
-    def clean_patient(self):
-
-        full_id = self.cleaned_data["patient"]
-
-        if not full_id.isdigit():
-            raise forms.ValidationError("ID number should only contain digits")
-
-        return full_id
+    time_field = forms.ChoiceField(choices=valid_times())
+    date_field = forms.DateField(widget=forms.TextInput(attrs={"type": "date"}))
 
     def clean_date_field(self):
-         date_field = self.cleaned_data["date_field"].lower()
+        returned_date = self.cleaned_data["date_field"]
+        # Don't allow appointments on Sat
+        if returned_date.weekday() == 5:
+            raise ValidationError("Appointments are not allowed on Saturday")
 
-         if not date_field.isalpha():
-             raise forms.ValidationError("date field shouldn't have digits")
+        return returned_date
 
-         return date_field
+    def clean(self):
+        doctor = self.cleaned_data["doctor"]
+        returned_time = self.cleaned_data["time_field"]
+        returned_date = self.cleaned_data["date_field"]
 
-    def clean_doctor(self):
-         doctor = self.cleaned_data["doctor"].lower()
+        if Appointment.objects.filter(doctor=doctor, time_field=returned_time, date_field=returned_date).exists():
+            raise ValidationError("This appointment slot is taken chose another time")
 
-         if not doctor.isalpha():
-             raise forms.ValidationError("doctor name shouldn't have digits")
+        return self.cleaned_data
 
-         return doctor
-
-    def clean_time_field(self):
-         time_field = self.cleaned_data["time_field"].lower()
-
-         if not time_field.isalpha():
-             raise forms.ValidationError("time field shouldn't have digits")
-
-         return time_field
+    class Meta:
+        model = Appointment
+        fields = ['time_field', 'date_field', 'doctor']

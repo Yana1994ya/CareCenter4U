@@ -1,4 +1,6 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import HttpResponse, render
+from django.urls import reverse
 from django.views.generic import DetailView
 
 from appointments.forms import AppointmentForm
@@ -34,15 +36,20 @@ def add(request):
     if request.method == "POST":
         form = AppointmentForm(request.POST)
         if form.is_valid():
-            add = form.cleaned_data
-            add = form.save()
+            appointment = form.instance
+            appointment.patient = request.user
+            appointment.save()
 
-            return HttpResponse("appointment added!!!")
+            return HttpResponseRedirect(reverse(appointment_added))
 
     else:
         form = AppointmentForm()
 
     return render(request, "appointment_files/add.html", {"form": form})
+
+
+def appointment_added(request):
+    return render(request, "appointment_files/added.html")
 
 
 def delete_app(request, app_id):

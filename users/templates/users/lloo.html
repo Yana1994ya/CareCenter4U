@@ -1,110 +1,136 @@
-
 <html>
 
 <head>
-  <title>Center Locator</title>
-  <style>
-    #map {
-      height: 100%;
-    }
-    
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
+    <title>Center Locator</title>
+    <style>
+        #map {
+            height: 100%;
+        }
 
-    /* Styling for autocomplete search bar */
-    #pac-card {
-      background-color: #fff;
-      border-radius: 2px 0 0 2px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      box-sizing: border-box;
-      font-family: Roboto;
-      margin: 10px 10px 0 0;
-      -moz-box-sizing: border-box;
-      outline: none;
-    }
-    
-    #pac-container {
-      padding-top: 12px;
-      padding-bottom: 12px;
-      margin-right: 12px;
-    }
-    
-    #pac-input {
-      background-color: #fff;
-      font-family: Roboto;
-      font-size: 15px;
-      font-weight: 300;
-      margin-left: 12px;
-      padding: 0 11px 0 13px;
-      text-overflow: ellipsis;
-      width: 400px;
-    }
-    
-    #pac-input:focus {
-      border-color: #4d90fe;
-    }
-    
-    #title {
-      color: #fff;
-      background-color: #acbcc9;
-      font-size: 18px;
-      font-weight: 400;
-      padding: 6px 12px;
-    }
-    
-    .hidden {
-      display: none;
-    }
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
 
-    /* Styling for an info pane that slides out from the left. 
-     * Hidden by default. */
-    #panel {
-      height: 100%;
-      width: null;
-      background-color: white;
-      position: fixed;
-      z-index: 1;
-      overflow-x: hidden;
-      transition: all .2s ease-out;
-    }
-    
-    .open {
-      width: 250px;
-    }
-    
-    .place {
-      font-family: 'open sans', arial, sans-serif;
-      font-size: 1.2em;
-      font-weight: 500;
-      margin-block-end: 0px;
-      padding-left: 18px;
-      padding-right: 18px;
-    }
-    
-    .distanceText {
-      color: silver;
-      font-family: 'open sans', arial, sans-serif;
-      font-size: 1em;
-      font-weight: 400;
-      margin-block-start: 0.25em;
-      padding-left: 18px;
-      padding-right: 18px;
-    }
-  </style>
+        /* Styling for autocomplete search bar */
+        #pac-card {
+            background-color: #fff;
+            border-radius: 2px 0 0 2px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
+            font-family: Roboto;
+            margin: 10px 10px 0 0;
+            -moz-box-sizing: border-box;
+            outline: none;
+        }
+
+        #pac-container {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            margin-right: 12px;
+        }
+
+        #pac-input {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 11px 0 13px;
+            text-overflow: ellipsis;
+            width: 400px;
+        }
+
+        #pac-input:focus {
+            border-color: #4d90fe;
+        }
+
+        #title {
+            color: #fff;
+            background-color: #acbcc9;
+            font-size: 18px;
+            font-weight: 400;
+            padding: 6px 12px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Styling for an info pane that slides out from the left.
+         * Hidden by default. */
+        #panel {
+            height: 100%;
+            width: null;
+            background-color: white;
+            position: fixed;
+            z-index: 1;
+            overflow-x: hidden;
+            transition: all .2s ease-out;
+        }
+
+        .open {
+            width: 250px;
+        }
+
+        .place {
+            font-family: 'open sans', arial, sans-serif;
+            font-size: 1.2em;
+            font-weight: 500;
+            margin-block-end: 0px;
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+
+        .distanceText {
+            color: silver;
+            font-family: 'open sans', arial, sans-serif;
+            font-size: 1em;
+            font-weight: 400;
+            margin-block-start: 0.25em;
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+    </style>
 </head>
 
 <body>
-  <!-- The div to hold the map -->
-  <div id="map"></div>
-	{% load static %}
-  <script type="text/javascript" src="{% static 'location3.js' %}"></script>
+<!-- The div to hold the map -->
+<div id="map"></div>
+{% load static %}
+<script type="text/javascript" src="{% static 'location3.js' %}"></script>
+<script type="text/javascript">
+    function initMap() {
+        var myLatLng = {lat: -25.363, lng: 131.044};
 
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFwCrNqf3ok2HVGH2u4DpyzZEnkLFZtc0&libraries=places&callback=initMap">
-  </script>
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: myLatLng
+        });
+
+        var geocoder = new google.maps.Geocoder();
+        codeAddress(geocoder, map);
+    }
+    function codeAddress(geocoder, map) {
+        geocoder.geocode({'address': "סורוקה"}, function (results, status) {
+            if (status === 'OK') {
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+</script>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFwCrNqf3ok2HVGH2u4DpyzZEnkLFZtc0&libraries=places&callback=initMap">
+</script>
 </body>
 
 </html>

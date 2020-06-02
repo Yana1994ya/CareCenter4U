@@ -1,0 +1,12 @@
+{%  extends "base.html" %}
+{% block content %}
+    <div class="rtl">
+        <h1>אנא בחר עיר:</h1>
+        <ul class="option_list">
+            {% for city in cities %}
+                <li><a href="{% url "center_list" city_id=city.id %}">{{ city.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+

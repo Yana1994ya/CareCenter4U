@@ -1,9 +1,8 @@
 from django.contrib import admin
-from .models import appointments
-from appointments.models import Doctors
+from appointments.models import Doctor, Appointment
 
 # Register your models here.
-admin.site.register(appointments)
+admin.site.register(Appointment)
 
 
 # Register your models here.
@@ -11,4 +10,4 @@ class DoctorAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(Doctors, DoctorAdmin)
+admin.site.register(Doctor, DoctorAdmin)

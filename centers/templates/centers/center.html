@@ -1,0 +1,26 @@
+{%  extends "base.html" %}
+{% block content %}
+    <div class="rtl">
+        <h1>מרכז {{ center.name }}</h1>
+        <ul class="center_details">
+            <li>שכונה: {{ center.neighborhood }}</li>
+            <li>כתובת: {{ center.address }}</li>
+            <li>קופה: {{ center.network }}</li>
+            {% if center.hours %}
+                <li>שעות פעילות: <br />{{ center.hours|linebreaksbr }}</li>
+            {% endif %}
+            {% if center.phone %}
+                <li>טלפון: {{ center.phone }}</li>
+            {% endif %}
+            {% if center.fax %}
+                <li>פקס: {{ center.fax }}</li>
+            {% endif %}
+            {% if center.email %}
+                <li>מייל: {{ center.email }}</li>
+            {% endif %}
+            {% if center.routes %}
+                <li>דרכי הגעה (קווי אוטובוס): {{ center.routes }}</li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}

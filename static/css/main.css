@@ -93,3 +93,26 @@ a,a:link,a:visited {
 .submit-row {
     margin-top: 10px;
 }
+
+.rtl{
+    direction: rtl;
+    font-family: Arial;
+}
+
+.rtl h1{
+    font-size: 120%;
+    margin-bottom: 10px;
+}
+
+.rtl .option_list li{
+    margin-bottom: 5px;
+}
+
+.rtl .all{
+    float: left;
+}
+
+.rtl .center_details li{
+    margin-bottom: 10px;
+
+}

@@ -6,29 +6,36 @@ from centers.models import Center
 
 # Create your models here.
 
-class appointments(models.Model):
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    pat_id = models.ForeignKey('users.Customer', default=Customer.USERNAME_FIELD, blank=False, on_delete=models.CASCADE,
-                               related_name='u_name')
-    center = models.ForeignKey(Center, blank=False, max_length=100, on_delete=models.CASCADE, related_name='cen_id')
+class Appointment(models.Model):
+    patient = models.ForeignKey(
+        'users.Customer',
+        blank=False,
+        on_delete=models.CASCADE,
+        related_name='u_name'
+    )
+
     time_field = models.TimeField(blank=True, null=True)
     date_field = models.DateField(blank=True, null=True)
-    doctor_name = models.ForeignKey('Doctors', max_length=40, on_delete=models.CASCADE, related_name='doc_name')
+    doctor = models.ForeignKey(
+        'Doctor',
+        max_length=40,
+        on_delete=models.CASCADE,
+        related_name='doc_name'
+    )
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name + ' ' + self.pat_id.username
+        return str(self.patient) + " to doctor " + str(self.doctor)
 
 
-class Doctors(models.Model):
+class Doctor(models.Model):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     center_id = models.ForeignKey(Center, blank=False, max_length=100, on_delete=models.CASCADE,
                                   related_name='cen_i_work_at')
-    specielity = models.CharField(max_length=200)
+    speciality = models.CharField(max_length=200)
 
     class Meta:
         unique_together = (("first_name", "last_name"),)
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name + ' ,' + self.specielity
+        return self.first_name + ' ' + self.last_name + ' ,' + self.speciality

@@ -1,0 +1,19 @@
+{%  extends "base.html" %}
+{% block content %}
+    <div class="rtl">
+        {% if neighborhood %}
+            <h1>בחר מרפאה ב{{ neighborhood }}:</h1>
+        {% else %}
+            <h1>בחר מרפאה ב{{ city.name }}:</h1>
+        {% endif %}
+
+        <ul class="option_list">
+            {% for center in centers %}
+                <li>
+                    <a href="{% url "center" center_id=center.id %}" class="center_name">{{ center.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+

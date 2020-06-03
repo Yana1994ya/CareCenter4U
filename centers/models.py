@@ -7,6 +7,12 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+    def to_json(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
+
 
 class Neighborhood(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)

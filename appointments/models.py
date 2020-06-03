@@ -30,9 +30,18 @@ class Appointment(models.Model):
 class Doctor(models.Model):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
-    center_id = models.ForeignKey(Center, blank=False, max_length=100, on_delete=models.CASCADE,
-                                  related_name='cen_i_work_at')
+    center = models.ForeignKey(Center, blank=False, max_length=100, on_delete=models.CASCADE,
+                               related_name='cen_i_work_at')
     speciality = models.CharField(max_length=200)
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name + ' ,' + self.speciality
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "speciality": self.speciality,
+            "center_id": self.center.id
+        }

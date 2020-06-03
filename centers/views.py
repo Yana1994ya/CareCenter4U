@@ -1,5 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+
+from appointments.models import Doctor
 from centers.models import City, Neighborhood, Center
 
 
@@ -81,3 +83,15 @@ def centers_json(request):
         center.save()
 
         return JsonResponse({"status": "ok"})
+
+
+def cities_json(request):
+    cities = City.objects.all()
+
+    return JsonResponse(list(map(lambda x: x.to_json(), cities)), safe=False)
+
+
+def doctors_json(request):
+    doctors = Doctor.objects.all()
+
+    return JsonResponse(list(map(lambda x: x.to_json(), doctors)), safe=False)

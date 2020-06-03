@@ -67,7 +67,7 @@ def edit(request, app_id):
     l_name = app.last_name
     t = app.time_field
     d = app.date_field
-    cent = app.center_id
+    cent = app.center
     d_name = app.doctor_name
     p_id = app.pat_id
     if request.method != 'POST':

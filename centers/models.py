@@ -40,6 +40,18 @@ class Center(models.Model):
 
     routes = models.CharField(max_length=200, default=None, blank=True)
 
+    long = models.DecimalField(max_digits=10, decimal_places=8, blank=True, default=None, null=True)
+    lat = models.DecimalField(max_digits=10, decimal_places=8, blank=True, default=None, null=True)
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "address": self.address,
+            "long": self.long,
+            "lat": self.lat
+        }
+
     @property
     def city_name(self) -> str:
         return self.neighborhood.city.name

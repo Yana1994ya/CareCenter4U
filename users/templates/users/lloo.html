@@ -101,6 +101,9 @@
 <div id="map"></div>
 {% load static %}
 <script type="text/javascript" src="{% static 'location3.js' %}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script type="text/javascript">
     function initMap() {
         var myLatLng = {lat: -25.363, lng: 131.044};
@@ -112,19 +115,68 @@
 
         var geocoder = new google.maps.Geocoder();
         codeAddress(geocoder, map);
+
     }
+
     function codeAddress(geocoder, map) {
-        geocoder.geocode({'address': "סורוקה"}, function (results, status) {
-            if (status === 'OK') {
-                map.setCenter(results[0].geometry.location);
+        let left = []
+        let processLocation;
+
+        processLocation = function () {
+            if (left.length == 0) return;
+
+            let center = left.pop();
+            if (center.long) {
+                let loc = {
+                    lng: parseFloat(center.long),
+                    lat: parseFloat(center.lat)
+                };
+                map.setCenter(loc);
+                map.setZoom(10);
+
                 var marker = new google.maps.Marker({
                     map: map,
-                    position: results[0].geometry.location
+                    position: loc
                 });
+                processLocation();
             } else {
-                alert('Geocode was not successful for the following reason: ' + status);
+                geocoder.geocode({"address": center.address}, function (results, status) {
+                    if (status === 'OK') {
+                        jQuery.ajax({
+                            "type": "POST",
+                            "url": "/centers/centers.json",
+                            "data": {
+                                "csrfmiddlewaretoken": jQuery.cookie("csrftoken"),
+                                "id": center.id,
+                                "long": results[0].geometry.location.lng() + "",
+                                "lat": results[0].geometry.location.lat() + "",
+                            },
+                            "success": function () {
+
+                                var marker = new google.maps.Marker({
+                                    map: map,
+                                    position: results[0].geometry.location
+                                });
+                                processLocation();
+                            }
+                        });
+
+                        //processLocation();
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                        console.log("couldn't find", center.name, center.id);
+
+                        processLocation();
+                    }
+                });
             }
+        }
+
+        jQuery.get("/centers/centers.json", function (response) {
+            left = response;
+            processLocation();
         });
+
     }
 </script>
 

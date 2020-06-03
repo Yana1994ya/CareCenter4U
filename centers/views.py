@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from centers.models import City, Neighborhood, Center
 
@@ -56,3 +57,27 @@ def center_view(request, center_id):
             "center": center
         }
     )
+
+
+def centers_json(request):
+    if request.method == "GET":
+        centers = Center.objects.all()
+
+        result = []
+
+        for center in centers:
+            result.append(center.to_json())
+
+        return JsonResponse(result, safe=False)
+    else:
+        center_id = int(request.POST["id"])
+        long = float(request.POST["long"])
+        lat = float(request.POST["lat"])
+
+        center = get_object_or_404(Center, id=center_id)
+
+        center.long = long
+        center.lat = lat
+        center.save()
+
+        return JsonResponse({"status": "ok"})

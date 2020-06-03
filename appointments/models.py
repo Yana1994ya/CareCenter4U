@@ -34,8 +34,5 @@ class Doctor(models.Model):
                                   related_name='cen_i_work_at')
     speciality = models.CharField(max_length=200)
 
-    class Meta:
-        unique_together = (("first_name", "last_name"),)
-
     def __str__(self):
         return self.first_name + ' ' + self.last_name + ' ,' + self.speciality

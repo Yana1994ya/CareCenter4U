@@ -15,5 +15,5 @@ urlpatterns = [
     path("help_update", help_update, name="help_update"),
     path("update_success", update_success, name="update_success"),
     path("show/<int:id>", show, name="show"),
-    path("lloo", TemplateView.as_view(template_name="users/lloo.html"), name="lloo"),
+
 ]

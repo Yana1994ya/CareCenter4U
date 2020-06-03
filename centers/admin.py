@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 
+from appointments.models import Doctor
 from centers.models import Center, City, Network, Neighborhood
 
 
@@ -17,6 +18,10 @@ class CenterModelForm(forms.ModelForm):
         exclude = ()
 
 
+class DoctorInline(admin.TabularInline):
+    model = Doctor
+
+
 class CenterAdmin(admin.ModelAdmin):
     list_display = (
         'city_name', 'neighborhood', 'network', 'name'
@@ -29,6 +34,10 @@ class CenterAdmin(admin.ModelAdmin):
     )
 
     form = CenterModelForm
+
+    inlines = [
+        DoctorInline,
+    ]
 
     class Media:
         css = {

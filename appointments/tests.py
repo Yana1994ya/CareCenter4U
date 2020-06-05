@@ -55,65 +55,14 @@ class TestData:
 
 class DoctorsTest(TestCase):
     def setUpTestdata(cls):
-        Doctor.objects.create(first_name = 'lio')
-        Appointment.objects.create(app = '1234')
-
-    def test_validate_first_name(self):
-        form = AppointmentForm()
-        form.cleaned_data = {'first_name': 'tamar'}
-        result = form.clean_first_name()
-        self.assertEqual(result, 'tamar')
-
-    def test_reject_invalid_first_name(self):
-        form = AppointmentForm()
-        form.cleaned_data = {'first_name': 'tamar1'}
-        self.assertRaises(ValidationError, form.clean_first_name)
-
-    def test_validate_last_name(self):
-        form = AppointmentForm()
-        form.cleaned_data = {'last_name': 'cohen'}
-        result = form.clean_last_name()
-        self.assertEqual(result, 'cohen')
-
-    def test_reject_invalid_last_name(self):
-        form = AppointmentForm()
-        form.cleaned_data = {'last_name': 'cohen1'}
-        self.assertRaises(ValidationError, form.clean_last_name)
-
-    def test_validate_pat_id(self):
-        form = AppointmentForm()
-        form.cleaned_data = {'pat_id': '123123'}
-        result = form.clean_pat_id()
-        self.assertEqual(result, '123123')
-
-    def test_reject_invalid_pat_id(self):
-        form = AppointmentForm()
-        form.cleaned_data = {'last_name': 'cohen1'}
-        self.assertRaises(ValidationError, form.clean_last_name)
-
-    def test_validate_center(self):
-        form = AppointmentForm()
-        form.cleaned_data = {'center': 'maccbi'}
-        result = form.clean_center()
-        self.assertEqual(result, 'maccbi')
-
-    # def test_reject_invalid_center(self):
-    #     form = appointmentForm()
-    #     form.cleaned_data = {'center': 'Maccbi1'}
-    #     self.assertRaises(ValidationError, form.clean_center)
+        Doctor.objects.create(first_name='lio')
+        Appointment.objects.create(app='1234')
 
     def test_validate_date_field(self):
         form = AppointmentForm()
-        form.cleaned_data = {'date_field': 'here'}
+        form.cleaned_data = {'date_field': datetime.date(2000, 1, 2)}
         result = form.clean_date_field()
-        self.assertEqual(result, 'here')
-
-    def test_validate_doctor_name(self):
-        form = AppointmentForm()
-        form.cleaned_data = {'doctor_name': 'tamar'}
-        result = form.clean_doctor_name()
-        self.assertEqual(result, 'tamar')
-
+        self.assertEqual(result, datetime.date(2000, 1, 2))
 
     def test_Docter(self):
         request = HttpRequest()
@@ -135,10 +84,10 @@ class DoctorsTest(TestCase):
             # 'd_name': 'doctor_name',
             # 'p_id': '12341234',
             'id': '12341234',
-            'first_name':'firstname',
-            'last_name':'lastname',
-            'specielity':'specielity',
-            'center_id':'maccbi',
+            'first_name': 'firstname',
+            'last_name': 'lastname',
+            'specielity': 'specielity',
+            'center_id': 'maccbi',
 
         }
         response = Doctor(request)
@@ -200,4 +149,3 @@ class DoctorsTest(TestCase):
         with self.assertRaises(ValidationError) as ctx:
             form.clean()
         self.assertEqual(ctx.exception.message, "This appointment slot is taken chose another time")
-

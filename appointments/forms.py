@@ -34,12 +34,16 @@ class AppointmentForm(forms.ModelForm):
         return returned_date
 
     def clean(self):
-        doctor = self.cleaned_data["doctor"]
-        returned_time = self.cleaned_data["time_field"]
-        returned_date = self.cleaned_data["date_field"]
+        if "doctor" in self.cleaned_data and \
+                "time_field" in self.cleaned_data and \
+                "date_field" in self.cleaned_data:
 
-        if Appointment.objects.filter(doctor=doctor, time_field=returned_time, date_field=returned_date).exists():
-            raise ValidationError("This appointment slot is taken chose another time")
+            doctor = self.cleaned_data["doctor"]
+            returned_time = self.cleaned_data["time_field"]
+            returned_date = self.cleaned_data["date_field"]
+
+            if Appointment.objects.filter(doctor=doctor, time_field=returned_time, date_field=returned_date).exists():
+                raise ValidationError("This appointment slot is taken chose another time")
 
         return self.cleaned_data
 

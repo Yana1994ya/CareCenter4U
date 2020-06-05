@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="rtl">
+        {{ form.errors }}
         <div ng-app="CC4U" ng-controller="DoctorSelect">
             {% verbatim %}
             <div ng-show="cities && city == null">
@@ -61,7 +62,7 @@
         </div>
         <form id="myform" class="myform" action="{% url "add" %}" method="post" style="display: none">
             {% csrf_token %}
-            {{ form.errors }}
+
 
             <div>
                 <p>בחר תאריך:</p>

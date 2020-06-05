@@ -65,6 +65,9 @@ def centers_json(request):
     if request.method == "GET":
         centers = Center.objects.all()
 
+        if "city" in request.GET:
+            centers = centers.filter(neighborhood__city__id=request.GET["city"])
+
         result = []
 
         for center in centers:
@@ -93,5 +96,8 @@ def cities_json(request):
 
 def doctors_json(request):
     doctors = Doctor.objects.all()
+
+    if "center" in request.GET:
+        doctors = doctors.filter(center_id=request.GET["center"])
 
     return JsonResponse(list(map(lambda x: x.to_json(), doctors)), safe=False)

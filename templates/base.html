@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>CareCenter4U</title>
+    <title>{% block title %}CareCenter4U{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="/static/css/reset.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
 </head>
@@ -25,9 +25,8 @@
             {% if user.is_authenticated and user.is_superuser %}
                 | <a href="/admin/" class="button">Admin</a>
             {% endif %}
-           	{% if user.is_authenticated and user.secretary %} 
-            	| Add
-           	 	| Update
+           	{% if user.secretary %}
+            	| <a href="{% url "view_appointment_sec" %}" class="button">View All Appointments</a>
            	{% endif %}
         </div>
         <div class="login-box">
@@ -45,5 +44,7 @@
             Put your content here
         {% endblock %}
     </div>
+    {% block extra_footer %}
+    {% endblock %}
 </body>
 </html>

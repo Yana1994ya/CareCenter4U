@@ -1,16 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="rtl">
-        <h1>התורים שלי:</h1>
+        <form method="get" class="myform" action="{% url "view_appointment_sec" %}">
+            סינון לפי ת"ז: <input type="text" name="filter_id" value="{{ filter_id|default:"" }}" />
+            <input type="submit" value="סנן"/>
+        </form>
+        {% if not filter_id %}
+            <h1>כל התורים:</h1>
+        {% else %}
+            <h1>תורים של {{ filter_id }}:</h1>
+        {% endif %}
         <table class="table">
             <thead>
             <tr>
+                {% if not filter_id %}
+                    <th>ת"ז:</th>
+                {% endif %}
+                <th>שם פרטי:</th>
+                <th>שם משפחה:</th>
                 <th>שעה:</th>
                 <th>תאריך:</th>
                 <th>רופא:</th>
                 <th>מרכז רפואי:</th>
                 {% for item in query_results %}
                     <tr>
+                        {% if not filter_id %}
+                            <td>{{ item.patient.username }}</td>
+                        {% endif %}
+                        <td>{{ item.patient.first_name }}</td>
+                        <td>{{ item.patient.last_name }}</td>
                         <td>{{ item.time_field|date:"H:i" }}</td>
                         <td>{{ item.date_field|date:"d/m/Y" }}</td>
                         <td>{{ item.doctor }}</td>
@@ -24,7 +42,9 @@
                         </td>
                     </tr>
                 {% endfor %}
-
         </table>
+        <div>
+            <a href="{% url "appointment_add_sec" %}" class="button">הוספת תור</a>
+        </div>
     </div>
 {% endblock %}

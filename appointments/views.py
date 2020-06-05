@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse, render
 from django.urls import reverse
 from django.views.generic import DetailView
 
-from appointments.forms import AppointmentForm
+from appointments.forms import AppointmentForm, AppointmentSecForm
 from appointments.models import Appointment
 
 
@@ -27,9 +27,25 @@ def index(request):
         return render(request, 'base.html')
 
 
-def viewAppointments(request):
-    query_results = Appointment.objects.all()
+def view_appointments(request):
+    query_results = Appointment.objects.filter(patient=request.user)
     return render(request, 'appointment_files/view_appointment.html', {'query_results': query_results})
+
+
+def view_appointments_sec(request):
+    if not request.user.secretary:
+        return HttpResponseRedirect("/")
+
+    query_results = Appointment.objects.all()
+    filter_id = None
+    if request.GET.get("filter_id"):
+        filter_id = request.GET["filter_id"]
+        query_results = query_results.filter(patient__username=filter_id)
+
+    return render(request, 'appointment_files/view_appointment_sec.html', {
+        'query_results': query_results,
+        "filter_id": filter_id
+    })
 
 
 def add(request):
@@ -40,7 +56,7 @@ def add(request):
             appointment.patient = request.user
             appointment.save()
 
-            return HttpResponseRedirect(reverse(appointment_added))
+            return HttpResponseRedirect(reverse("appointment_added"))
 
     else:
         form = AppointmentForm()
@@ -48,8 +64,20 @@ def add(request):
     return render(request, "appointment_files/add.html", {"form": form})
 
 
-def appointment_added(request):
-    return render(request, "appointment_files/added.html")
+def add_sec(request):
+    if request.method == "POST":
+        form = AppointmentSecForm(request.POST)
+        if form.is_valid():
+            appointment = form.instance
+            appointment.patient = form.cleaned_data["patient"]
+            appointment.save()
+
+            return HttpResponseRedirect(reverse("appointment_added"))
+
+    else:
+        form = AppointmentSecForm()
+
+    return render(request, "appointment_files/add_sec.html", {"form": form})
 
 
 def delete_app(request, app_id):
@@ -58,7 +86,7 @@ def delete_app(request, app_id):
     if request.method == 'POST':
         app.delete()
 
-    return HttpResponse("appointment Deleted!!!")
+    return HttpResponseRedirect(reverse("appointment_deleted"))
 
 
 def edit(request, app_id):

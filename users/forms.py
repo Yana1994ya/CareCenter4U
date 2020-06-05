@@ -6,6 +6,7 @@ from django import forms
 from users.models import Customer
 from centers.models import Center
 
+
 class RegistrationForm(forms.Form):
     id_number = forms.CharField(min_length=9, max_length=9)
     password = forms.CharField(widget=forms.PasswordInput(), min_length=6, max_length=9)
@@ -56,6 +57,7 @@ class RegistrationForm(forms.Form):
             raise forms.ValidationError("last name shouldn't have digits")
 
         return last_name
+
 
 class UpdateInfoForm(forms.ModelForm):
     class Meta:

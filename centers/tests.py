@@ -1,7 +1,13 @@
+from json import loads
+from unittest.mock import Mock
+
 from django.test import TestCase
 
 # Create your tests here.
+from appointments.models import Doctor
+from appointments.tests import TestData
 from centers.models import City, Neighborhood, Network, Center
+from centers.views import cities_json, doctors_json, centers_json
 
 
 class ModelsTestCase(TestCase):
@@ -145,3 +151,126 @@ class ModelsIntegrationTestCase(TestCase):
 
         # function 3 - test that both centers are accessible via city
         self.assertEquals(Center.objects.filter(neighborhood__city=self.city_tel_aviv).count(), 2)
+
+    # Unit test #4 - Yana
+    # Sprint3/4
+    def test_serialize_city_to_json(self):
+        city = City(name="beer_shava", id=10)
+        self.assertEqual(city.to_json(), {'id': 10, 'name': 'beer_shava'})
+
+    # Unit test #5 - Yana
+    # Sprint3/4
+    def test_serialize_doctor_to_json(self):
+        test_data = TestData.create()
+        test_data.save()
+
+        doc = Doctor(first_name="aharon", last_name="barak", speciality="general", center=test_data.center)
+        doc.save()
+
+        self.assertEqual(doc.to_json(), {
+            'center_id': 1,
+            'first_name': 'aharon',
+            'id': 2,
+            'last_name': 'barak',
+            'speciality': 'general'
+        })
+
+
+class ApiIntegrationTests(TestCase):
+    def setUp(self) -> None:
+        self.test_data = TestData.create()
+        self.test_data.save()
+
+    def assertJson(self, response, content):
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+
+        self.assertEqual(loads(response.content), content)
+
+    # Integration #1 - Yana
+    # Sprint3/4
+    def test_cities_api(self):
+        request = Mock()
+
+        response = cities_json(request)
+        self.assertJson(response, [{"id": 1, "name": "test"}])
+
+    # Integration #2 - Yana
+    # Sprint3/4
+    def test_doctors_api(self):
+        request = Mock(GET={})
+
+        response = doctors_json(request)
+        self.assertJson(response, [{'center_id': 1,
+                                    'first_name': 'first_name',
+                                    'id': 1,
+                                    'last_name': 'last_name',
+                                    'speciality': 'speciality'}])
+
+    # Integration #3 - Yana
+    # Sprint3/4
+    def test_doctors_api_limit_center(self):
+        request = Mock(GET={"center": self.test_data.center.id})
+
+        center = Center(
+            neighborhood=self.test_data.neighborhood,
+            name="test",
+            hours="hours",
+            phone="phone",
+            fax="fax",
+            email="email",
+            routes="routes",
+            network=self.test_data.network
+        )
+        center.save()
+        doctor = Doctor(center=center, first_name="first_name2", last_name="last_name2", speciality="speciality")
+        doctor.save()
+
+        response = doctors_json(request)
+        self.assertJson(response, [{'center_id': 1,
+                                    'first_name': 'first_name',
+                                    'id': 1,
+                                    'last_name': 'last_name',
+                                    'speciality': 'speciality'}])
+
+    # Integration #4 - Yana
+    # Sprint3/4
+    def test_centers_api(self):
+        request = Mock(GET={}, POST={}, method="GET")
+
+        response = centers_json(request)
+        self.assertJson(response, [{'address': '',
+                                    'id': 1,
+                                    'lat': None,
+                                    'long': None,
+                                    'name': 'test'}])
+
+    # Integration #5 - Yana
+    # Sprint3/4
+    def test_centers_filter_api(self):
+        city = City(name="test")
+        city.save()
+
+        neighborhood = Neighborhood(name="test", city=city)
+        neighborhood.save()
+
+        center = Center(
+            neighborhood=neighborhood,
+            name="test2",
+            hours="hours",
+            phone="phone",
+            fax="fax",
+            email="email",
+            routes="routes",
+            network=self.test_data.network
+        )
+        center.save()
+
+        request = Mock(GET={"city": self.test_data.city.id}, POST={}, method="GET")
+
+        response = centers_json(request)
+        self.assertJson(response, [{'address': '',
+                                    'id': 1,
+                                    'lat': None,
+                                    'long': None,
+                                    'name': 'test'}])

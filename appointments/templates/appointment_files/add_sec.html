@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="rtl">
+        {% if form.errors %}
+            {{ form.errors }}
+        {% endif %}
         <div ng-app="CC4U" ng-controller="DoctorSelect">
             {% verbatim %}
             <div ng-show="cities && city == null">
@@ -59,9 +62,8 @@
             </div>
             {% endverbatim %}
         </div>
-        <form id="myform" class="myform" action="{% url "add" %}" method="post" style="display: none">
+        <form id="myform" class="myform" action="{% url "appointment_add_sec" %}" method="post" style="display: none">
             {% csrf_token %}
-            {{ form.errors }}
 
             <div>
                 <p>בחר תאריך:</p>
@@ -70,6 +72,10 @@
             <div>
                 <p>בחר שעה:</p>
                 {{ form.time_field }}
+            </div>
+            <div>
+                <p>ת"ז:</p>
+                {{ form.patient }}
             </div>
             {{ form.doctor }}
             <input type="submit" value="add"/>

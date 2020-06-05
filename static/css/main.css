@@ -102,6 +102,7 @@ a,a:link,a:visited {
 .rtl h1{
     font-size: 120%;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .rtl .option_list li{
@@ -115,4 +116,8 @@ a,a:link,a:visited {
 .rtl .center_details li{
     margin-bottom: 10px;
 
+}
+
+.rtl .table{
+    width: 100%;
 }

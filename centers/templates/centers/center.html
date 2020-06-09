@@ -21,6 +21,10 @@
             {% if center.routes %}
                 <li>דרכי הגעה (קווי אוטובוס): {{ center.routes }}</li>
             {% endif %}
+            <p>&nbsp;</p>
+            {% if user.secretary %}
+            	<a href="{% url 'update_center' center.id  %}" class="button">Update center</a>
+           	{% endif %}
         </ul>
     </div>
 {% endblock %}

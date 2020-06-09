@@ -1,0 +1,29 @@
+{%  extends "base.html" %}
+{% block content %}
+    <form class="myform" action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p class="submit-row">
+        <input type="submit" value="Apply"/>
+    </p>
+  </form>
+  <ul>
+    {% for x in centers %}
+      <li>
+        {{ x.id }}
+        <p>{{ x.name }}</p>
+        <p>{{ x.neighborhood }}</p>
+        <p>{{ x.address }}</p>
+        <p>{{ x.hours }}</p>
+        <p>{{ x.phone }}</p>
+        <p>{{ x.fax }}</p>
+        <p>{{ x.email }}</p>
+
+        <a href="{% url 'update_center' x.id %}">Update Center</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock content %}
+
+
+

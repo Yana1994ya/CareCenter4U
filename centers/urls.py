@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from centers.views import index, city_index, center_list, center_view, centers_json, cities_json, doctors_json
+from centers.views import index, city_index, center_list, center_view, centers_json, cities_json, doctors_json, update_center, help_update
 
 urlpatterns = [
     path("", index, name="centers_index"),
@@ -13,4 +13,7 @@ urlpatterns = [
     path("cities.json", cities_json, name="cities_json"),
     path("doctors.json", doctors_json, name="doctors_json"),
     path("map", TemplateView.as_view(template_name="centers/map.html"), name="centers_map"),
+    path("update_center/<int:center_id>", update_center, name="update_center"),
+    path("help_update", help_update, name="help_update"),
+
 ]

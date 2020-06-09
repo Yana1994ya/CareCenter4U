@@ -1,8 +1,8 @@
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
-
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
+from centers.forms import UpdateInfoForm
 from appointments.models import Doctor
-from centers.models import City, Neighborhood, Center
+from centers.models import City, Center
 
 
 # Create your views here.
@@ -101,3 +101,31 @@ def doctors_json(request):
         doctors = doctors.filter(center_id=request.GET["center"])
 
     return JsonResponse(list(map(lambda x: x.to_json(), doctors)), safe=False)
+
+def update_center(request, center_id):
+    center = get_object_or_404(Center, id=center_id)
+    name = center.name
+    neighborhood = center.neighborhood
+    address = center.address
+    hours = center.hours
+    phone = center.phone
+    fax = center.fax
+    email = center.email
+
+    if request.method != 'POST':
+        form = UpdateInfoForm(instance=center)
+    else:
+        form = UpdateInfoForm(instance=center, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("update_success"))
+    context = {'name':name, 'neighborhood':neighborhood, 'address':address, 'hours':hours, 'phone':phone, 'fax':fax, 'email':email, 'form': form}
+    return render(request, 'centers/update_center.html', context)
+
+
+def help_update(request, id_):
+    query_results = Center.objects.get(id=id_)
+    return render(request, 'centers/help_update.html', {'query_results': query_results})
+
+
+

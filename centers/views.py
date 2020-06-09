@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
 from centers.forms import UpdateInfoForm
@@ -102,7 +103,12 @@ def doctors_json(request):
 
     return JsonResponse(list(map(lambda x: x.to_json(), doctors)), safe=False)
 
+
+@login_required
 def update_center(request, center_id):
+    if not request.user.secretary:
+        return HttpResponseRedirect("/")
+
     center = get_object_or_404(Center, id=center_id)
     name = center.name
     neighborhood = center.neighborhood
@@ -119,13 +125,19 @@ def update_center(request, center_id):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("update_success"))
-    context = {'name':name, 'neighborhood':neighborhood, 'address':address, 'hours':hours, 'phone':phone, 'fax':fax, 'email':email, 'form': form}
+
+    context = {
+        'name': name,
+        'neighborhood': neighborhood,
+        'address': address,
+        'hours': hours,
+        'phone': phone,
+        'fax': fax,
+        'email': email,
+        'form': form
+    }
+
     return render(request, 'centers/update_center.html', context)
-
-
-def help_update(request, id_):
-    query_results = Center.objects.get(id=id_)
-    return render(request, 'centers/help_update.html', {'query_results': query_results})
 
 
 
